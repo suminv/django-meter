@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+  <h2>Login</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+
+      <input type="submit" class="btn btn-primary" value="Login">
+<p>Don't have an account?</p> <a href="{% url 'meters:register' %}">Register</a>
+
+    </button>
+  </form>
+
+
+    {% if messages %}
+        <ul class="messages">
+    {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+        </ul>
+
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags  %}
+
+{% block title %}
+    Main page
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+
+    <h1>Hello, {{ user.username }}!</h1>
+        <br>
+        <br>
+        <br>
+    <h4>Personal information</h4>
+    First name: Vlad<br>
+    Last name: Sumin<br>
+    City: Nootdorp<br>
+    Street: Teginger<br>
+    Building: 10<br>
+    Apartment: 100<br>
+    Phone: +3106111111<br>
+    E-mail: vlad@mail.com<br>
+        <br>
+        <br>
+        <br>
+<div style="display: flex;">
+
+    <div style="flex: 1;">
+    <h4>Last Meter Data</h4>
+    {% for data in qs %}
+      {% if forloop.counter == 1 %}
+        <p>Date: {{ data.created|date:"d.m.Y" }}</p>
+        <p>Meter 1: {{ data.meter_1 }}</p>
+        <p>Meter 2: {{ data.meter_2 }}</p>
+        <p>Meter 3: {{ data.meter_3 }}</p>
+        <p>Meter 4: {{ data.meter_4 }}</p>
+        <p>Meter 5: {{ data.meter_5 }}</p>
+      {% endif %}
+    {% endfor %}
+  </div>
+  <div style="flex: 1;">
+    <h4>Previous Meter Data</h4>
+    {% for data in qs %}
+      {% if forloop.counter != 1 %}
+        <p>Date: {{ data.created|date:"d.m.Y" }}</p>
+        <p>Meter 1: {{ data.meter_1 }}</p>
+        <p>Meter 2: {{ data.meter_2 }}</p>
+        <p>Meter 3: {{ data.meter_3 }}</p>
+        <p>Meter 4: {{ data.meter_4 }}</p>
+        <p>Meter 5: {{ data.meter_5 }}</p>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+</div>
+
+
+{% endblock %}

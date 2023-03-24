@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}
+detail
+{% endblock %}
+
+
+{% block content %}
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Created</th>
+            <th scope="col">Meter_1</th>
+            <th scope="col">Meter_2</th>
+            <th scope="col">Meter_3</th>
+            <th scope="col">Meter_4</th>
+            <th scope="col">Meter_5</th>
+        </tr>
+        <tbody>
+            {% for data in object %}
+                <tr style="vertical-align: middle;">
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ data.created|date:"d.m.Y H:i" }}</td>
+                    <td>{{ data.meter_1 }}</td>
+                    <td>{{ data.meter_2 }}</td>
+                    <td>{{ data.meter_3 }}</td>
+                    <td>{{ data.meter_4 }}</td>
+                    <td>{{ data.meter_5 }}</td>
+
+                </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+
+
+{% endblock %}
