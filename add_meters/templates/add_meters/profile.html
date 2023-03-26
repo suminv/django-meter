@@ -13,14 +13,16 @@
         <br>
         <br>
     <h4>Personal information</h4>
-    First name: Vlad<br>
-    Last name: Sumin<br>
-    City: Nootdorp<br>
-    Street: Teginger<br>
-    Building: 10<br>
-    Apartment: 100<br>
-    Phone: +3106111111<br>
-    E-mail: vlad@mail.com<br>
+        {% for data in qs.2 %}
+        First name: {{ data.first_name }}<br>
+        Last name: {{ data.last_name}}<br>
+        City: {{data.city }}<br>
+        Street: {{data.street }} <br>
+        Building: {{ data.building }}<br>
+        Apartment: {{ data.apartment }}<br>
+        Phone: {{ data.phone_number }}<br>
+        E-mail: {{ data.email }}<br>
+        {% endfor %}
         <br>
         <br>
         <br>
@@ -28,28 +30,28 @@
 
     <div style="flex: 1;">
     <h4>Last Meter Data</h4>
-    {% for data in qs %}
-      {% if forloop.counter == 1 %}
+    {% for data in qs.0 %}
+{#      {% if forloop.counter == 1 %}#}
         <p>Date: {{ data.created|date:"d.m.Y" }}</p>
         <p>Meter 1: {{ data.meter_1 }}</p>
         <p>Meter 2: {{ data.meter_2 }}</p>
         <p>Meter 3: {{ data.meter_3 }}</p>
         <p>Meter 4: {{ data.meter_4 }}</p>
         <p>Meter 5: {{ data.meter_5 }}</p>
-      {% endif %}
+{#      {% endif %}#}
     {% endfor %}
   </div>
   <div style="flex: 1;">
     <h4>Previous Meter Data</h4>
-    {% for data in qs %}
-      {% if forloop.counter != 1 %}
+    {% for data in qs.1 %}
+{#      {% if forloop.counter != 1 %}#}
         <p>Date: {{ data.created|date:"d.m.Y" }}</p>
         <p>Meter 1: {{ data.meter_1 }}</p>
         <p>Meter 2: {{ data.meter_2 }}</p>
         <p>Meter 3: {{ data.meter_3 }}</p>
         <p>Meter 4: {{ data.meter_4 }}</p>
         <p>Meter 5: {{ data.meter_5 }}</p>
-      {% endif %}
+{#      {% endif %}#}
     {% endfor %}
   </div>
 

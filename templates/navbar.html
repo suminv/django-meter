@@ -5,7 +5,8 @@
         <a href="{% url 'meters:create' %}" class="btn btn-outline-light">+ New</a>
         <a href="{% url 'meters:profile' %}" class="btn btn-outline-light">Profile</a>
         <a href="{% url 'meters:detail' pk=user.id %}" class="btn btn-outline-light">Detail</a>
-        <a href="{% url 'meters:update' pk=user.id %}" class="btn btn-outline-light">Update</a>
+        <a href="{% url 'meters:update' pk=user.id %}" class="btn btn-outline-light">Update Meter</a>
+{#        <a href="{% url 'meters:create_profile' pk=user.id %}" class="btn btn-outline-light">Update Profile</a>#}
         <a href="{% url 'meters:logout' %}" class="btn btn-outline-light">Logout</a>
         {% else %}
             <a href="{% url 'meters:login' %}" class="btn btn-outline-light">Login</a>

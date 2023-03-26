@@ -5,5 +5,9 @@ Home page
 {% endblock %}
 
 {% block content %}
-<h1>Welcome to home page</h1>
+    {% if request.user.is_authenticated %}
+    <h1>Welcome to home page</h1>
+    {% else %}
+    <h1>Please login</h1>
+    {% endif %}
 {% endblock %}

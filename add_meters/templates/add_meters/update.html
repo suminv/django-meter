@@ -3,14 +3,23 @@
 {% load crispy_forms_tags %}
 
 {% block title %}
-update
+Update meters
 {% endblock %}
 
 {% block content %}
+{% if object %}
+
+    <h4>Update the meters data.</h4>
+
     <form action="" method="POST">
     {% csrf_token %}
     {{ form|crispy }}
-    <button type="submit" class="btn btn-primary mt-2">update</button>
 
+    <button type="submit" class="btn btn-primary mt-2">update</button>
     </form>
+        {% else %}
+        <p>No meter data found for this user. Please add data first.</p>
+{% endif %}
 {% endblock %}
+
+

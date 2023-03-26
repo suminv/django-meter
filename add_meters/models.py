@@ -16,4 +16,18 @@ class AddMeterData(models.Model):
         return f'User: {self.user.last_name}, Date: {self.created}'
 
 
-# TODO Make new model Profile.
+class Profile(models.Model):
+    first_name = models.CharField(max_length=20)
+    last_name = models.CharField(max_length=20)
+    email = models.EmailField()
+    city = models.CharField(max_length=20)
+    street = models.CharField(max_length=50)
+    building = models.CharField(max_length=10)
+    apartment = models.IntegerField()
+    phone_number = models.CharField(max_length=30)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.last_name} - apartment: {self.apartment}'
+
+
