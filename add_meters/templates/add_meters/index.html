@@ -7,6 +7,7 @@ Home page
 {% block content %}
     {% if request.user.is_authenticated %}
     <h1>Welcome to home page</h1>
+    <p>The Meter Management System is a web application that allows users to manage their meter readings for various services such as electricity, gas, water, etc. Users can create an account, add and edit meter readings, view previous readings, and manage their profile.</p>
     {% else %}
     <h1>Please login</h1>
     {% endif %}
