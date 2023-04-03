@@ -8,6 +8,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, UpdateView, DetailView, TemplateView, FormView, CreateView
 from datetime import datetime
+from django.shortcuts import get_object_or_404
 import pytz
 
 from .forms import AddMeterForm
@@ -79,7 +80,7 @@ class MeterUpdateView(UpdateView):
     success_url = reverse_lazy('meters:profile')
 
     def get_object(self, queryset=None):
-        """if qs is empty, show alert"""
+        """if qs is empty, show error 404"""
         try:
             return AddMeterData.objects.filter(user=self.request.user).latest('created')
         except AddMeterData.DoesNotExist:
