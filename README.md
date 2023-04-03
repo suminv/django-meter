@@ -10,7 +10,7 @@ The Meter Management System is a web application that allows users to manage the
 I
 ### Installation
 
-1. Clone the repository: git clone https://github.com/your_username/meter-management-system.git
+1. Clone the repository: git clone `https://github.com/suminv/django-meter.git`
 2. Install the dependencies by running `pip install -r requirements.txt`
 3. Create a new file .env in the root directory and add the following variables:
 `SECRET_KEY: Django secret key`
