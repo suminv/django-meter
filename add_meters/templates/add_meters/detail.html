@@ -4,35 +4,174 @@
 detail
 {% endblock %}
 
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+{% endblock %}
 
 {% block content %}
-    
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Created</th>
-            <th scope="col">Meter_1</th>
-            <th scope="col">Meter_2</th>
-            <th scope="col">Meter_3</th>
-            <th scope="col">Meter_4</th>
-            <th scope="col">Meter_5</th>
-        </tr>
-        <tbody>
-            {% for data in object %}
-                <tr style="vertical-align: middle;">
-                    <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ data.created|date:"d.m.Y H:i" }}</td>
-                    <td>{{ data.meter_1 }}</td>
-                    <td>{{ data.meter_2 }}</td>
-                    <td>{{ data.meter_3 }}</td>
-                    <td>{{ data.meter_4 }}</td>
-                    <td>{{ data.meter_5 }}</td>
+    <div class="panel fade-in">
+        <h3 class="section-title">Meter History</h3>
+        <p class="section-subtitle">Consumption by counters for selected period.</p>
 
-                </tr>
+        <form method="get" class="row g-2 align-items-end mb-3">
+            <div class="col-sm-4 col-md-3">
+                <label for="period" class="form-label mb-1">Period</label>
+                <select id="period" name="period" class="form-select">
+                    {% for value, label in period_options %}
+                        <option value="{{ value }}" {% if selected_period == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-sm-4 col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Apply</button>
+            </div>
+        </form>
+
+        <div class="row g-2 mb-3">
+            {% for item in meter_summaries %}
+                <div class="col-sm-6 col-lg-4">
+                    <div class="panel h-100">
+                        <div class="section-title">{{ item.label }}</div>
+                        <div><strong>Total consumption:</strong> {{ item.total }}</div>
+                        <div><strong>Average per day:</strong> {{ item.avg_per_day }}</div>
+                        <div class="section-subtitle">
+                            Trend vs previous segment:
+                            {% if item.trend > 0 %}
+                                +{{ item.trend }} (up)
+                            {% elif item.trend < 0 %}
+                                {{ item.trend }} (down)
+                            {% else %}
+                                0 (no change)
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
             {% endfor %}
-        </tbody>
-        </table>
+        </div>
 
+        {% if chart_labels %}
+            <div class="panel mb-3">
+                <h5 class="section-title mb-3">{{ chart_title }}</h5>
+                <div style="height: 360px;">
+                    <canvas id="metersChart"></canvas>
+                </div>
+            </div>
+        {% else %}
+            <p class="section-subtitle mb-3">No records in selected period.</p>
+        {% endif %}
 
+        {% if meters %}
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Created</th>
+                            <th>Meter 1</th>
+                            <th>Meter 2</th>
+                            <th>Meter 3</th>
+                            <th>Meter 4</th>
+                            <th>Meter 5</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for data in meters %}
+                            <tr>
+                                <th scope="row">{{ forloop.counter }}</th>
+                                <td>{{ data.created|date:"d.m.Y H:i" }}</td>
+                                <td>{{ data.meter_1 }}</td>
+                                <td>{{ data.meter_2 }}</td>
+                                <td>{{ data.meter_3 }}</td>
+                                <td>{{ data.meter_4 }}</td>
+                                <td>{{ data.meter_5 }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="section-subtitle mb-3">No records yet.</p>
+            <a class="btn btn-primary" href="{% url 'meters:create' %}">Add First Record</a>
+        {% endif %}
+    </div>
+
+    {{ chart_labels|json_script:"chart-labels" }}
+    {{ chart_meter_1|json_script:"chart-meter-1" }}
+    {{ chart_meter_2|json_script:"chart-meter-2" }}
+    {{ chart_meter_3|json_script:"chart-meter-3" }}
+    {{ chart_meter_4|json_script:"chart-meter-4" }}
+    {{ chart_meter_5|json_script:"chart-meter-5" }}
+
+    <script>
+        (function () {
+            const labelsNode = document.getElementById('chart-labels');
+            const canvas = document.getElementById('metersChart');
+            if (!labelsNode || !canvas) return;
+
+            const labels = JSON.parse(labelsNode.textContent);
+            if (!labels.length) return;
+
+            const meter1 = JSON.parse(document.getElementById('chart-meter-1').textContent);
+            const meter2 = JSON.parse(document.getElementById('chart-meter-2').textContent);
+            const meter3 = JSON.parse(document.getElementById('chart-meter-3').textContent);
+            const meter4 = JSON.parse(document.getElementById('chart-meter-4').textContent);
+            const meter5 = JSON.parse(document.getElementById('chart-meter-5').textContent);
+
+            new Chart(canvas, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Meter 1',
+                            data: meter1,
+                            backgroundColor: 'rgba(15, 138, 124, 0.72)',
+                            borderColor: '#0f8a7c',
+                            borderWidth: 1,
+                        },
+                        {
+                            label: 'Meter 2',
+                            data: meter2,
+                            backgroundColor: 'rgba(23, 79, 114, 0.72)',
+                            borderColor: '#174f72',
+                            borderWidth: 1,
+                        },
+                        {
+                            label: 'Meter 3',
+                            data: meter3,
+                            backgroundColor: 'rgba(224, 122, 40, 0.72)',
+                            borderColor: '#e07a28',
+                            borderWidth: 1,
+                        },
+                        {
+                            label: 'Meter 4',
+                            data: meter4,
+                            backgroundColor: 'rgba(43, 108, 176, 0.72)',
+                            borderColor: '#2b6cb0',
+                            borderWidth: 1,
+                        },
+                        {
+                            label: 'Meter 5',
+                            data: meter5,
+                            backgroundColor: 'rgba(239, 68, 68, 0.72)',
+                            borderColor: '#ef4444',
+                            borderWidth: 1,
+                        },
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, title: { display: true, text: 'Consumption' } },
+                        x: { ticks: { maxTicksLimit: 10 } }
+                    }
+                }
+            });
+        })();
+    </script>
 {% endblock %}

@@ -8,18 +8,22 @@ Update meters
 
 {% block content %}
 {% if object %}
+    <div class="panel fade-in">
+        <h4 class="section-title">Update Last Record</h4>
+        <p class="section-subtitle">You are editing your most recent meter entry.</p>
 
-    <h4>Update the meters data.</h4>
-
-    <form action="" method="POST">
-    {% csrf_token %}
-    {{ form|crispy }}
-
-    <button type="submit" class="btn btn-primary mt-2">update</button>
-    </form>
-        {% else %}
-        <p>No meter data found for this user. Please add data first.</p>
+        <form action="" method="POST">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-primary mt-2">Save Changes</button>
+        </form>
+    </div>
+{% else %}
+    <div class="panel fade-in">
+        <h4 class="section-title">No Data to Update</h4>
+        <p class="section-subtitle mb-3">Add your first meter values and then you can edit them.</p>
+        <a class="btn btn-primary" href="{% url 'meters:create' %}">Add First Record</a>
+    </div>
 {% endif %}
 {% endblock %}
-
 

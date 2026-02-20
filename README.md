@@ -1,40 +1,98 @@
-# Project Name: Meter Management System
+# Meter Management System
 
-The Meter Management System is a web application that allows users to manage their meter readings for various services such as electricity, gas, water, etc. Users can create an account, add and edit meter readings, view previous readings, and manage their profile.
+Meter Management System is a Django web app for tracking utility meter readings.
+It supports user accounts, profile management, meter history, and period-based consumption analytics.
 
-### Requirements
+## Tech Stack
 
-* Python 3.8 or higher
-* Django 3.2 or higher
-* Other requirements can be found in requirements.txt file
-I
-### Installation
+- Python 3.11+ (project tested with 3.13)
+- Django 5.x
+- SQLite (default)
+- django-crispy-forms + crispy-bootstrap5
+- Chart.js (history charts)
 
-1. Clone the repository: git clone `https://github.com/suminv/django-meter.git`
-2. Install the dependencies by running `pip install -r requirements.txt`
-3. Create a new file .env in the root directory and add the following variables:
-`SECRET_KEY: Django secret key`
-4. Run the migration: `python manage.py migrate`
-5. Create a superuser: `python manage.py createsuperuser`
-6. Run the development server: `python manage.py runserver`
+## Main Features
 
-### Usage
+- User registration, login, logout
+- Create and edit meter readings (`meter_1 ... meter_5`)
+- Validation rules:
+  - values must be non-negative
+  - new readings cannot be less than previous readings
+- Profile create/edit (with sync to Django `User` identity fields)
+- Profile dashboard:
+  - latest and previous readings
+  - difference statuses (`Normal`, `High spike`, `Low usage`, `Decrease`)
+  - 30-day totals and average/day
+  - latest 5 records
+- History page:
+  - period filter (`7/30/90/180/365/all`)
+  - grouped consumption chart by period
+  - per-meter summary (`total`, `average/day`, `trend`)
 
-To use the application, users must first create an account by registering with their email address and choosing a password. Once logged in, users can add meter readings, view their profile, and update their profile information.
+## Installation
 
-### Features
+1. Clone repository:
 
-* User registration and authentication
-* Add and edit meter readings
-* View previous readings with the difference in readings
-* Profile management
-* Contributors
+```bash
+git clone https://github.com/suminv/django-meter.git
+cd django-meter
+```
 
-Name: Vlad
+2. Create and activate virtual environment:
 
-### License
+```bash
+python -m venv venv
+source venv/bin/activate
+```
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+3. Install dependencies:
 
+```bash
+pip install -r requirements.txt
+```
+
+4. Configure environment variables (optional for local dev):
+
+```bash
+export SECRET_KEY='your-secret-key'
+export DEBUG='True'
+export ALLOWED_HOSTS='localhost,127.0.0.1'
+```
+
+5. Apply migrations:
+
+```bash
+python manage.py migrate
+```
+
+6. Create superuser (optional):
+
+```bash
+python manage.py createsuperuser
+```
+
+7. Run dev server:
+
+```bash
+python manage.py runserver
+```
+
+## Tests
+
+Run all tests:
+
+```bash
+python manage.py test
+```
+
+Run app tests only:
+
+```bash
+python manage.py test add_meters.tests -v 2
+```
+
+## License
+
+MIT License. See `LICENCE`.
 
 

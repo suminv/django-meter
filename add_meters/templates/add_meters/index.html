@@ -5,10 +5,38 @@ Home page
 {% endblock %}
 
 {% block content %}
-    {% if request.user.is_authenticated %}
-    <h1>Welcome to home page</h1>
-    <p>The Meter Management System is a web application that allows users to manage their meter readings for various services such as electricity, gas, water, etc. Users can create an account, add and edit meter readings, view previous readings, and manage their profile.</p>
-    {% else %}
-    <h1>Please login</h1>
-    {% endif %}
+    <div class="panel fade-in">
+        {% if request.user.is_authenticated %}
+            <h1 class="section-title">Dashboard</h1>
+            <p class="section-subtitle mb-4">Track and compare your latest utility values in one place.</p>
+            <div class="row g-3">
+                <div class="col-md-4 fade-in stagger-1">
+                    <div class="panel h-100">
+                        <h5 class="section-title">Add New Record</h5>
+                        <p class="section-subtitle">Enter current meter values with side-by-side previous readings.</p>
+                        <a href="{% url 'meters:create' %}" class="btn btn-primary">Open Form</a>
+                    </div>
+                </div>
+                <div class="col-md-4 fade-in stagger-2">
+                    <div class="panel h-100">
+                        <h5 class="section-title">Profile Snapshot</h5>
+                        <p class="section-subtitle">Check personal details and latest difference between readings.</p>
+                        <a href="{% url 'meters:profile' %}" class="btn btn-outline-secondary">Open Profile</a>
+                    </div>
+                </div>
+                <div class="col-md-4 fade-in stagger-3">
+                    <div class="panel h-100">
+                        <h5 class="section-title">Full History</h5>
+                        <p class="section-subtitle">Browse all submitted entries in chronological order.</p>
+                        <a href="{% url 'meters:detail' %}" class="btn btn-outline-secondary">Open History</a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <h1 class="section-title">Meter Atlas</h1>
+            <p class="section-subtitle mb-4">A clean way to store and compare utility meter readings.</p>
+            <a href="{% url 'meters:login' %}" class="btn btn-primary">Sign In</a>
+            <a href="{% url 'meters:register' %}" class="btn btn-outline-secondary ms-2">Create Account</a>
+        {% endif %}
+    </div>
 {% endblock %}

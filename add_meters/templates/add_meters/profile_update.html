@@ -6,13 +6,23 @@ Update user profile
 {% endblock %}
 
 {% block content %}
-
-    <form action="" method="post">
-    {% csrf_token %}
-    {{ form|crispy }}
-
-    <button type="submit" class="btn btn btn-primary mt-2">update</button>
-
-    </form>
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="panel fade-in">
+                {% if object %}
+                    <h4 class="section-title">Edit Profile</h4>
+                    <p class="section-subtitle mb-3">Update contact information for billing records.</p>
+                {% else %}
+                    <h4 class="section-title">Profile Details</h4>
+                    <p class="section-subtitle mb-3">Fill in contact information for billing records.</p>
+                {% endif %}
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button type="submit" class="btn btn-primary mt-2">Save Profile</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

@@ -1,8 +1,5 @@
 {% extends 'base.html' %}
 
-{% load crispy_forms_filters %}
-{% load crispy_forms_tags  %}
-
 {% block title %}
     Add meter data
 {% endblock %}
@@ -10,15 +7,78 @@
 
 
 {% block content %}
+    <div class="panel fade-in">
+        <h4 class="section-title">New Meter Record</h4>
+        {% if last_record %}
+            <p class="section-subtitle mb-4">Previous entry from {{ last_record.created|date:"d.m.Y H:i" }}</p>
+        {% else %}
+            <p class="section-subtitle mb-4">No previous readings yet.</p>
+        {% endif %}
 
-    <form action=""method="post">
+        <form action="" method="post">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
 
-    {% csrf_token %}
-    {{ form|crispy }}
+            <div class="table-responsive mb-3">
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Meter</th>
+                            <th>Previous</th>
+                            <th>New Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Meter 1</strong></td>
+                            <td>{% if last_record %}{{ last_record.meter_1 }}{% else %}-{% endif %}</td>
+                            <td>
+                                {{ form.meter_1 }}
+                                {% if form.meter_1.errors %}<div class="text-danger small mt-1">{{ form.meter_1.errors|striptags }}</div>{% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Meter 2</strong></td>
+                            <td>{% if last_record %}{{ last_record.meter_2 }}{% else %}-{% endif %}</td>
+                            <td>
+                                {{ form.meter_2 }}
+                                {% if form.meter_2.errors %}<div class="text-danger small mt-1">{{ form.meter_2.errors|striptags }}</div>{% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Meter 3</strong></td>
+                            <td>{% if last_record %}{{ last_record.meter_3 }}{% else %}-{% endif %}</td>
+                            <td>
+                                {{ form.meter_3 }}
+                                {% if form.meter_3.errors %}<div class="text-danger small mt-1">{{ form.meter_3.errors|striptags }}</div>{% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Meter 4</strong></td>
+                            <td>{% if last_record %}{{ last_record.meter_4 }}{% else %}-{% endif %}</td>
+                            <td>
+                                {{ form.meter_4 }}
+                                {% if form.meter_4.errors %}<div class="text-danger small mt-1">{{ form.meter_4.errors|striptags }}</div>{% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Meter 5</strong></td>
+                            <td>{% if last_record %}{{ last_record.meter_5 }}{% else %}-{% endif %}</td>
+                            <td>
+                                {{ form.meter_5 }}
+                                {% if form.meter_5.errors %}<div class="text-danger small mt-1">{{ form.meter_5.errors|striptags }}</div>{% endif %}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-    <button type="submit" class="btn btn-primary">save</button>
-
-</form>
+            <button type="submit" class="btn btn-primary">Save Record</button>
+        </form>
+    </div>
 
 {% endblock %}
-

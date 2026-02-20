@@ -7,68 +7,118 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container">
-    <h1>Hello, {{ user.username }}!</h1>
-        <br>
-        <br>
-        <br>
-    <h4>Personal information</h4>
-        {% for data in qs.2 %}
-        First name: {{ data.first_name }}<br>
-        Last name: {{ data.last_name}}<br>
-        City: {{data.city }}<br>
-        Street: {{data.street }} <br>
-        Building: {{ data.building }}<br>
-        Apartment: {{ data.apartment }}<br>
-        Phone: {{ data.phone_number }}<br>
-        E-mail: {{ data.email }}<br>
-        {% endfor %}
-        <br>
-        <br>
-        <br>
-<div style="display: flex;">
-
-    <div style="flex: 1;">
-    <h4>Last Meter Data</h4>
-    {% for data in qs.0 %}
-{#      {% if forloop.counter == 1 %}#}
-        <p>Date: {{ data.created|date:"d.m.Y" }}</p>
-        <p>Meter 1: {{ data.meter_1 }}</p>
-        <p>Meter 2: {{ data.meter_2 }}</p>
-        <p>Meter 3: {{ data.meter_3 }}</p>
-        <p>Meter 4: {{ data.meter_4 }}</p>
-        <p>Meter 5: {{ data.meter_5 }}</p>
-{#      {% endif %}#}
-    {% endfor %}
-  </div>
-  <div style="flex: 1;">
-    <h4>Previous Meter Data</h4>
-    {% for data in qs.1 %}
-{#      {% if forloop.counter != 1 %}#}
-        <p>Date: {{ data.created|date:"d.m.Y" }}</p>
-        <p>Meter 1: {{ data.meter_1 }}</p>
-        <p>Meter 2: {{ data.meter_2 }}</p>
-        <p>Meter 3: {{ data.meter_3 }}</p>
-        <p>Meter 4: {{ data.meter_4 }}</p>
-        <p>Meter 5: {{ data.meter_5 }}</p>
-{#      {% endif %}#}
-    {% endfor %}
-  </div>
-
-    <div style="flex: 1">
-        <h4>Different</h4>
-        <p>Date: {{ date_now|date:'d:m:Y' }}</p>
-        <p>Meter 1: {{ diff_meter_1 }}</p>
-        <p>Meter 2: {{ diff_meter_2 }}</p>
-        <p>Meter 3: {{ diff_meter_3 }}</p>
-        <p>Meter 4: {{ diff_meter_4 }}</p>
-        <p>Meter 5: {{ diff_meter_5 }}</p>
+    <div class="panel fade-in">
+        <h1 class="section-title">Hello, {{ user.username }}</h1>
+        <p class="section-subtitle">Your account overview and latest meter comparison.</p>
     </div>
 
+    <div class="row g-3 mt-1">
+        <div class="col-lg-4 fade-in stagger-1">
+            <div class="panel h-100">
+                <h4 class="section-title">Personal Information</h4>
+                {% if profile %}
+                    <div class="small">
+                        <div><strong>First name:</strong> {{ profile.first_name }}</div>
+                        <div><strong>Last name:</strong> {{ profile.last_name }}</div>
+                        <div><strong>City:</strong> {{ profile.city }}</div>
+                        <div><strong>Street:</strong> {{ profile.street }}</div>
+                        <div><strong>Building:</strong> {{ profile.building }}</div>
+                        <div><strong>Apartment:</strong> {{ profile.apartment }}</div>
+                        <div><strong>Phone:</strong> {{ profile.phone_number }}</div>
+                        <div><strong>E-mail:</strong> {{ profile.email }}</div>
+                    </div>
+                    <a href="{% url 'meters:update_profile' %}" class="btn btn-primary btn-sm mt-3">Edit Profile</a>
+                {% else %}
+                    <p class="section-subtitle">Profile is not created yet.</p>
+                    <a href="{% url 'meters:create_profile' %}" class="btn btn-primary btn-sm">Create Profile</a>
+                {% endif %}
+            </div>
+        </div>
 
+        <div class="col-lg-4 fade-in stagger-2">
+            <div class="panel h-100">
+                <h4 class="section-title">Last Meter Data</h4>
+                {% if last_record %}
+                    {% with data=last_record %}
+                        <div class="small mb-2"><strong>Date:</strong> {{ data.created|date:"d.m.Y H:i" }}</div>
+                        <div><strong>Meter 1:</strong> {{ data.meter_1 }}</div>
+                        <div><strong>Meter 2:</strong> {{ data.meter_2 }}</div>
+                        <div><strong>Meter 3:</strong> {{ data.meter_3 }}</div>
+                        <div><strong>Meter 4:</strong> {{ data.meter_4 }}</div>
+                        <div><strong>Meter 5:</strong> {{ data.meter_5 }}</div>
+                    {% endwith %}
+                {% else %}
+                    <p class="section-subtitle">No meter data yet.</p>
+                {% endif %}
+            </div>
+        </div>
 
-</div>
-</div>
+        <div class="col-lg-4 fade-in stagger-3">
+            <div class="panel h-100">
+                <h4 class="section-title">Difference</h4>
+                {% if prev_record %}
+                    <div class="small mb-2"><strong>Calculated:</strong> {{ date_now|date:'d.m.Y H:i' }}</div>
+                    {% for item in diff_rows %}
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span><strong>{{ item.label }}:</strong> {{ item.value }}</span>
+                            <span class="badge text-bg-{{ item.status_class }}">{{ item.status_label }}</span>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="section-subtitle">Difference appears after at least two records.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 
+    <div class="panel fade-in mt-3">
+        <h4 class="section-title">30-Day Analytics</h4>
+        <p class="section-subtitle mb-3">Consumption and average daily usage by meter.</p>
+        <div class="row g-2">
+            {% for item in summary_30 %}
+                <div class="col-sm-6 col-lg-4">
+                    <div class="panel h-100">
+                        <div class="section-title">{{ item.label }}</div>
+                        <div><strong>Total:</strong> {{ item.total }}</div>
+                        <div class="section-subtitle"><strong>Average/day:</strong> {{ item.avg_per_day }}</div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 
+    <div class="panel fade-in mt-3">
+        <h4 class="section-title">Latest 5 Records</h4>
+        {% if recent_records %}
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Meter 1</th>
+                            <th>Meter 2</th>
+                            <th>Meter 3</th>
+                            <th>Meter 4</th>
+                            <th>Meter 5</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in recent_records %}
+                            <tr>
+                                <td>{{ item.created|date:"d.m.Y H:i" }}</td>
+                                <td>{{ item.meter_1 }}</td>
+                                <td>{{ item.meter_2 }}</td>
+                                <td>{{ item.meter_3 }}</td>
+                                <td>{{ item.meter_4 }}</td>
+                                <td>{{ item.meter_5 }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <a href="{% url 'meters:detail' %}" class="btn btn-primary btn-sm mt-2">Open Full History</a>
+        {% else %}
+            <p class="section-subtitle">No records yet.</p>
+        {% endif %}
+    </div>
 {% endblock %}

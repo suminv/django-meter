@@ -25,9 +25,8 @@ class Profile(models.Model):
     building = models.CharField(max_length=10)
     apartment = models.IntegerField()
     phone_number = models.CharField(max_length=30)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
 
     def __str__(self):
         return f'{self.last_name} - apartment: {self.apartment}'
-
 
