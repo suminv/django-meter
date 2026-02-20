@@ -8,4 +8,4 @@ Markdown==3.9
 Pygments==2.19.2
 pyquery==2.0.1
 pytz==2025.2
-sqlparse==0.5.3
+sqlparse==0.5.4
